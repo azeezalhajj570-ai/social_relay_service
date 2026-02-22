@@ -1,0 +1,60 @@
+<odoo>
+    <record id="res_config_settings_view_form_social_relay_service" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.social.relay.service</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Social Relay Service" name="social_relay_service" groups="base.group_system">
+                    <block title="Add Account URL Templates">
+                        <setting string="Facebook URL Template" help="Supports {returning_url} and {db_uuid} placeholders.">
+                            <field name="social_relay_facebook_add_accounts_url" placeholder="https://relay.example.com/oauth/facebook?returning_url={returning_url}&amp;db_uuid={db_uuid}"/>
+                        </setting>
+                        <setting string="Instagram URL Template" help="Supports {returning_url} and {db_uuid} placeholders.">
+                            <field name="social_relay_instagram_add_accounts_url" placeholder="https://relay.example.com/oauth/instagram?returning_url={returning_url}&amp;db_uuid={db_uuid}"/>
+                        </setting>
+                        <setting string="YouTube URL Template" help="Supports {returning_url} and {db_uuid} placeholders.">
+                            <field name="social_relay_youtube_add_accounts_url" placeholder="https://relay.example.com/oauth/youtube?returning_url={returning_url}&amp;db_uuid={db_uuid}"/>
+                        </setting>
+                        <setting string="Twitter URL Template" help="Supports {returning_url} and {db_uuid} placeholders.">
+                            <field name="social_relay_twitter_add_accounts_url" placeholder="https://relay.example.com/oauth/twitter?returning_url={returning_url}&amp;db_uuid={db_uuid}"/>
+                        </setting>
+                        <setting string="LinkedIn URL Template" help="Supports {returning_url} and {db_uuid} placeholders.">
+                            <field name="social_relay_linkedin_add_accounts_url" placeholder="https://relay.example.com/oauth/linkedin?returning_url={returning_url}&amp;db_uuid={db_uuid}"/>
+                        </setting>
+                    </block>
+
+                    <block title="Credentials">
+                        <setting string="YouTube Client ID">
+                            <field name="social_relay_youtube_client_id"/>
+                        </setting>
+                        <setting string="YouTube Client Secret">
+                            <field name="social_relay_youtube_client_secret" password="True"/>
+                        </setting>
+                        <setting string="Twitter Consumer Secret">
+                            <field name="social_relay_twitter_consumer_secret" password="True"/>
+                        </setting>
+                    </block>
+
+                    <block title="Firebase Values Returned by Relay">
+                        <setting string="Firebase Project ID">
+                            <field name="social_relay_firebase_project_id"/>
+                        </setting>
+                        <setting string="Firebase Web API Key">
+                            <field name="social_relay_firebase_web_api_key"/>
+                        </setting>
+                        <setting string="Firebase Push Certificate Key">
+                            <field name="social_relay_firebase_push_certificate_key"/>
+                        </setting>
+                        <setting string="Firebase Sender ID">
+                            <field name="social_relay_firebase_sender_id"/>
+                        </setting>
+                        <setting string="Firebase Web App ID">
+                            <field name="social_relay_firebase_web_app_id"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>
