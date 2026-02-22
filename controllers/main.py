@@ -69,10 +69,13 @@ class SocialRelayServiceController(http.Controller):
         request_base_url = request.httprequest.url_root.rstrip('/')
         base_url = configured_base_url.rstrip('/') or request_base_url
 
-        # Keep relay redirects aligned with the callback scheme/host when behind reverse proxies.
+        # Keep relay redirects aligned with callback expectations when behind reverse proxies.
         if returning_url:
             callback = urlparse(returning_url)
             base = urlparse(base_url)
+            if callback.scheme == 'https' and base.scheme == 'http':
+                base_url = urlunparse(base._replace(scheme='https'))
+                base = urlparse(base_url)
             if callback.scheme in ('http', 'https') and callback.netloc and callback.netloc == base.netloc and callback.scheme != base.scheme:
                 base_url = f'{callback.scheme}://{callback.netloc}'
 
@@ -120,6 +123,8 @@ class SocialRelayServiceController(http.Controller):
             self._icp().get_param('social.twitter_consumer_secret_key')
             or self._icp().get_param('social_relay_service.twitter_consumer_secret')
         )
+        consumer_key = (consumer_key or '').strip()
+        consumer_secret = (consumer_secret or '').strip()
         if not consumer_key or not consumer_secret:
             return None
 
@@ -346,6 +351,8 @@ class SocialRelayServiceController(http.Controller):
             self._icp().get_param('social.twitter_consumer_secret_key')
             or self._icp().get_param('social_relay_service.twitter_consumer_secret')
         )
+        consumer_key = (consumer_key or '').strip()
+        consumer_secret = (consumer_secret or '').strip()
         if not consumer_key or not consumer_secret:
             return self._oauth_error('twitter')
 
@@ -354,7 +361,7 @@ class SocialRelayServiceController(http.Controller):
             callback_host = urlparse(returning_url).netloc
             if callback_host and relay_host and callback_host != relay_host:
                 # Keep callback URL static for providers that validate it strictly.
-                callback_url = url_join(self._resolve_base_url(), 'oauth/twitter/callback')
+                callback_url = url_join(self._resolve_base_url(returning_url=returning_url), 'oauth/twitter/callback')
                 request.session['social_relay_twitter_returning_url'] = returning_url
                 twitter_oauth_url = url_join(self._TWITTER_ENDPOINT, "oauth/request_token")
                 headers = self._twitter_oauth_header(callback_url)
@@ -364,8 +371,10 @@ class SocialRelayServiceController(http.Controller):
                 response = requests.post(twitter_oauth_url, headers=headers, timeout=10)
                 if response.status_code != 200:
                     _logger.warning(
-                        'social_relay_service: twitter request_token failed status=%s body=%s',
+                        'social_relay_service: twitter request_token failed status=%s callback_url=%s consumer_key_len=%s body=%s',
                         response.status_code,
+                        callback_url,
+                        len(consumer_key),
                         response.text,
                     )
                     return self._oauth_error('twitter')
@@ -569,6 +578,7 @@ class SocialRelayServiceController(http.Controller):
             self._icp().get_param('social.twitter_consumer_secret_key')
             or self._icp().get_param('social_relay_service.twitter_consumer_secret')
         )
+        consumer_secret = (consumer_secret or '').strip()
         if not consumer_secret:
             return self._jsonrpc_error(rpc_id, 1, 'twitter_consumer_secret_not_configured')
 
