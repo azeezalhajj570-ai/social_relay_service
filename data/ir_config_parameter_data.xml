@@ -1,30 +1,30 @@
 <odoo>
     <data noupdate="1">
         <function model="ir.config_parameter" name="set_param"
-            eval="('social_relay_service.facebook_add_accounts_url', env['ir.config_parameter'].sudo().get_param('social_relay_service.facebook_add_accounts_url', '{base_url}/oauth/facebook?returning_url={returning_url}&amp;db_uuid={db_uuid}'))"/>
+            eval="('social_relay_service.facebook_add_accounts_url', '{base_url}/oauth/facebook?returning_url={returning_url}&amp;db_uuid={db_uuid}')"/>
         <function model="ir.config_parameter" name="set_param"
-            eval="('social_relay_service.instagram_add_accounts_url', env['ir.config_parameter'].sudo().get_param('social_relay_service.instagram_add_accounts_url', '{base_url}/oauth/instagram?returning_url={returning_url}&amp;db_uuid={db_uuid}'))"/>
+            eval="('social_relay_service.instagram_add_accounts_url', '{base_url}/oauth/instagram?returning_url={returning_url}&amp;db_uuid={db_uuid}')"/>
         <function model="ir.config_parameter" name="set_param"
-            eval="('social_relay_service.youtube_add_accounts_url', env['ir.config_parameter'].sudo().get_param('social_relay_service.youtube_add_accounts_url', '{base_url}/oauth/youtube?returning_url={returning_url}&amp;db_uuid={db_uuid}'))"/>
+            eval="('social_relay_service.youtube_add_accounts_url', '{base_url}/oauth/youtube?returning_url={returning_url}&amp;db_uuid={db_uuid}')"/>
         <function model="ir.config_parameter" name="set_param"
-            eval="('social_relay_service.twitter_add_accounts_url', env['ir.config_parameter'].sudo().get_param('social_relay_service.twitter_add_accounts_url', '{base_url}/oauth/twitter?returning_url={returning_url}&amp;db_uuid={db_uuid}'))"/>
+            eval="('social_relay_service.twitter_add_accounts_url', '{base_url}/oauth/twitter?returning_url={returning_url}&amp;db_uuid={db_uuid}')"/>
         <function model="ir.config_parameter" name="set_param"
-            eval="('social_relay_service.linkedin_add_accounts_url', env['ir.config_parameter'].sudo().get_param('social_relay_service.linkedin_add_accounts_url', '{base_url}/oauth/linkedin?returning_url={returning_url}&amp;db_uuid={db_uuid}'))"/>
+            eval="('social_relay_service.linkedin_add_accounts_url', '{base_url}/oauth/linkedin?returning_url={returning_url}&amp;db_uuid={db_uuid}')"/>
         <function model="ir.config_parameter" name="set_param"
-            eval="('social_relay_service.youtube_client_id', env['ir.config_parameter'].sudo().get_param('social_relay_service.youtube_client_id', ''))"/>
+            eval="('social_relay_service.youtube_client_id', '')"/>
         <function model="ir.config_parameter" name="set_param"
-            eval="('social_relay_service.youtube_client_secret', env['ir.config_parameter'].sudo().get_param('social_relay_service.youtube_client_secret', ''))"/>
+            eval="('social_relay_service.youtube_client_secret', '')"/>
         <function model="ir.config_parameter" name="set_param"
-            eval="('social_relay_service.twitter_consumer_secret', env['ir.config_parameter'].sudo().get_param('social_relay_service.twitter_consumer_secret', ''))"/>
+            eval="('social_relay_service.twitter_consumer_secret', '')"/>
         <function model="ir.config_parameter" name="set_param"
-            eval="('social_relay_service.firebase_project_id', env['ir.config_parameter'].sudo().get_param('social_relay_service.firebase_project_id', ''))"/>
+            eval="('social_relay_service.firebase_project_id', '')"/>
         <function model="ir.config_parameter" name="set_param"
-            eval="('social_relay_service.firebase_web_api_key', env['ir.config_parameter'].sudo().get_param('social_relay_service.firebase_web_api_key', ''))"/>
+            eval="('social_relay_service.firebase_web_api_key', '')"/>
         <function model="ir.config_parameter" name="set_param"
-            eval="('social_relay_service.firebase_push_certificate_key', env['ir.config_parameter'].sudo().get_param('social_relay_service.firebase_push_certificate_key', ''))"/>
+            eval="('social_relay_service.firebase_push_certificate_key', '')"/>
         <function model="ir.config_parameter" name="set_param"
-            eval="('social_relay_service.firebase_sender_id', env['ir.config_parameter'].sudo().get_param('social_relay_service.firebase_sender_id', ''))"/>
+            eval="('social_relay_service.firebase_sender_id', '')"/>
         <function model="ir.config_parameter" name="set_param"
-            eval="('social_relay_service.firebase_web_app_id', env['ir.config_parameter'].sudo().get_param('social_relay_service.firebase_web_app_id', ''))"/>
+            eval="('social_relay_service.firebase_web_app_id', '')"/>
     </data>
 </odoo>
