@@ -31,6 +31,9 @@
                         <setting string="YouTube Client Secret">
                             <field name="social_relay_youtube_client_secret" password="True"/>
                         </setting>
+                        <setting string="Twitter Consumer Key">
+                            <field name="social_relay_twitter_consumer_key"/>
+                        </setting>
                         <setting string="Twitter Consumer Secret">
                             <field name="social_relay_twitter_consumer_secret" password="True"/>
                         </setting>

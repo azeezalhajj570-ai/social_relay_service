@@ -17,6 +17,8 @@
         <function model="ir.config_parameter" name="set_param"
             eval="('social_relay_service.twitter_consumer_secret', '')"/>
         <function model="ir.config_parameter" name="set_param"
+            eval="('social_relay_service.twitter_consumer_key', '')"/>
+        <function model="ir.config_parameter" name="set_param"
             eval="('social_relay_service.firebase_project_id', '')"/>
         <function model="ir.config_parameter" name="set_param"
             eval="('social_relay_service.firebase_web_api_key', '')"/>

@@ -45,6 +45,10 @@ class ResConfigSettings(models.TransientModel):
         string='Twitter Consumer Secret',
         config_parameter='social_relay_service.twitter_consumer_secret',
     )
+    social_relay_twitter_consumer_key = fields.Char(
+        string='Twitter Consumer Key',
+        config_parameter='social_relay_service.twitter_consumer_key',
+    )
 
     social_relay_firebase_project_id = fields.Char(
         string='Firebase Project ID',

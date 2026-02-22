@@ -91,22 +91,35 @@ class SocialRelayServiceController(http.Controller):
         return urlunparse(parsed._replace(query=urlencode(query)))
 
     def _twitter_oauth_signature(self, method, url, params, consumer_secret, oauth_token_secret=''):
-        signing_key = '&'.join([consumer_secret, oauth_token_secret])
+        # OAuth 1.0 requires RFC3986 encoding for both the normalized parameters and signing key.
+        signing_key = '&'.join([
+            quote(str(consumer_secret or ''), safe='-._~'),
+            quote(str(oauth_token_secret or ''), safe='-._~'),
+        ])
         query = '&'.join([
-            '%s=%s' % (quote(str(key), safe='+:/'), quote(str(params[key]), safe='+:/,'))
+            '%s=%s' % (
+                quote(str(key), safe='-._~'),
+                quote(str(params[key]), safe='-._~'),
+            )
             for key in sorted(params.keys())
         ])
         base_string = '&'.join([
-            method,
-            quote(url, safe='+:/'),
-            quote(query, safe='+:/'),
+            str(method or '').upper(),
+            quote(url, safe='-._~'),
+            quote(query, safe='-._~'),
         ])
         digest = hmac.new(signing_key.encode(), base_string.encode(), hashlib.sha1).digest()
         return base64.b64encode(digest).decode()
 
     def _twitter_oauth_header(self, oauth_callback):
-        consumer_key = self._icp().get_param('social.twitter_consumer_key')
-        consumer_secret = self._icp().get_param('social.twitter_consumer_secret_key')
+        consumer_key = (
+            self._icp().get_param('social.twitter_consumer_key')
+            or self._icp().get_param('social_relay_service.twitter_consumer_key')
+        )
+        consumer_secret = (
+            self._icp().get_param('social.twitter_consumer_secret_key')
+            or self._icp().get_param('social_relay_service.twitter_consumer_secret')
+        )
         if not consumer_key or not consumer_secret:
             return None
 
@@ -126,7 +139,7 @@ class SocialRelayServiceController(http.Controller):
             consumer_secret,
         )
         header = 'OAuth ' + ', '.join([
-            '%s="%s"' % (key, quote(str(oauth_params[key]), safe='+:/'))
+            '%s="%s"' % (key, quote(str(oauth_params[key]), safe='-._~'))
             for key in sorted(oauth_params.keys())
         ])
         return {'Authorization': header}
@@ -325,8 +338,14 @@ class SocialRelayServiceController(http.Controller):
 
     @http.route('/oauth/twitter', type='http', auth='public', methods=['GET'], csrf=False)
     def oauth_twitter(self, returning_url=None, db_uuid=None, **kwargs):
-        consumer_key = self._icp().get_param('social.twitter_consumer_key')
-        consumer_secret = self._icp().get_param('social.twitter_consumer_secret_key')
+        consumer_key = (
+            self._icp().get_param('social.twitter_consumer_key')
+            or self._icp().get_param('social_relay_service.twitter_consumer_key')
+        )
+        consumer_secret = (
+            self._icp().get_param('social.twitter_consumer_secret_key')
+            or self._icp().get_param('social_relay_service.twitter_consumer_secret')
+        )
         if not consumer_key or not consumer_secret:
             return self._oauth_error('twitter')
 
@@ -389,7 +408,11 @@ class SocialRelayServiceController(http.Controller):
         return request.redirect(self._append_query_params(returning_url, {
             'oauth_token': oauth_token,
             'oauth_verifier': oauth_verifier,
-            'iap_twitter_consumer_key': self._icp().get_param('social.twitter_consumer_key') or '',
+            'iap_twitter_consumer_key': (
+                self._icp().get_param('social.twitter_consumer_key')
+                or self._icp().get_param('social_relay_service.twitter_consumer_key')
+                or ''
+            ),
         }), local=False)
 
     @http.route('/oauth/linkedin', type='http', auth='public', methods=['GET'], csrf=False)
@@ -542,7 +565,10 @@ class SocialRelayServiceController(http.Controller):
 
         rpc_id = payload.get('id')
         params = payload.get('params') or {}
-        consumer_secret = self._icp().get_param('social_relay_service.twitter_consumer_secret')
+        consumer_secret = (
+            self._icp().get_param('social.twitter_consumer_secret_key')
+            or self._icp().get_param('social_relay_service.twitter_consumer_secret')
+        )
         if not consumer_secret:
             return self._jsonrpc_error(rpc_id, 1, 'twitter_consumer_secret_not_configured')
 
@@ -554,15 +580,21 @@ class SocialRelayServiceController(http.Controller):
         if not method or not url or not isinstance(sign_params, dict):
             return self._jsonrpc_error(rpc_id, 2, 'invalid_signature_payload')
 
-        signing_key = '&'.join([consumer_secret, oauth_token_secret])
+        signing_key = '&'.join([
+            quote(str(consumer_secret or ''), safe='-._~'),
+            quote(str(oauth_token_secret or ''), safe='-._~'),
+        ])
         query = '&'.join([
-            '%s=%s' % (quote(str(key), safe='+:/'), quote(str(sign_params[key]), safe='+:/,'))
+            '%s=%s' % (
+                quote(str(key), safe='-._~'),
+                quote(str(sign_params[key]), safe='-._~'),
+            )
             for key in sorted(sign_params.keys())
         ])
         base_string = '&'.join([
-            method,
-            quote(url, safe='+:/'),
-            quote(query, safe='+:/'),
+            str(method or '').upper(),
+            quote(url, safe='-._~'),
+            quote(query, safe='-._~'),
         ])
         digest = hmac.new(signing_key.encode(), base_string.encode(), hashlib.sha1).digest()
         signature = base64.b64encode(digest).decode()
